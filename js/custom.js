@@ -110,7 +110,6 @@
                     $http.get(url).then(function successCallback(response) {
                         console.log(response);
                         if (response.data) {
-                            console.log(response.data);
                             var isbnKey = 'ISBN:' + isbn;
                             if (isbnKey in response.data) {
                                 var isbnValue = response.data[isbnKey];
