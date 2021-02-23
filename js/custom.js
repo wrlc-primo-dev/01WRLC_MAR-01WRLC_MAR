@@ -60,6 +60,8 @@
 
                         // If the ISBN is in the response look for a 'preview' element
                         if ((!(isbnValue['preview'])) || (isbnValue['preview'] !== 'borrow')) {
+                            console.log('WRONG');
+                            console.log(isbnValue['preview']);
 
                             // If there is no 'preview' element, then add a class to hide the OpenLibrary link
                             if (getIt === 'how') {
@@ -78,7 +80,7 @@
                     }
                 }
             }, function errorCallback(response) {
-                // If request gets a response without data, log response to console
+                // If request gets a response without data, log response to console but don't hide link
                 console.log(response);
             })
         }
@@ -91,6 +93,7 @@
         let getIt = '';
         // Watch for locationServices to populate
         $scope.$watch('$ctrl.parentCtrl.locationServices', function(service) {
+            // Only act if service is defined
             if (service) {
                 let services = service['serviceinfo'];
 
@@ -127,21 +130,25 @@
         let getIt = 'how';
         // Get serviceinfo elements for HowToGetitService in an array
         $scope.$watch('$ctrl.parentCtrl.almaHowToGetitService._services.serviceinfo', function(service) {
-            // Iterate through the serviceinfo array
-            var i;
-            for (i = 0; i < service.length; i++) {
-                // Only act on serviceinfo elements containing an OpenLibrary link
-                if (service[i]['link-to-service'].startsWith('https://openlibrary.org/search?isbn=')) {
-                    let label = service[i]['type'];
-                    let selector = 'a[translate="' + label + '"]';
+            // Only act if service is defined
+            if (service) {
+                // Iterate through the serviceinfo array
+                var i;
+                for (i = 0; i < service.length; i++) {
+                    // Only act on serviceinfo elements containing an OpenLibrary link
+                    if (service[i]['link-to-service'].startsWith('https://openlibrary.org/search?isbn=')) {
+                        let label = service[i]['type'];
+                        let selector = 'a[translate="' + label + '"]';
 
-                    // Get ISBN from Open Library service link
-                    let isbn = isbnCheck.setIsbn(service[i]['link-to-service']);
+                        // Get ISBN from Open Library service link
+                        let isbn = isbnCheck.setIsbn(service[i]['link-to-service']);
 
-                    // Check Open Library for borrowable copy of book and hide/show based on results
-                    isbnCheck.openLibrary(getIt, isbn, selector, ctrl);
+                        // Check Open Library for borrowable copy of book and hide/show based on results
+                        isbnCheck.openLibrary(getIt, isbn, selector, ctrl);
+                    }
                 }
             }
+
         });
     }]);
 
@@ -157,20 +164,22 @@
         let getIt = '';
         // Get services as an array
         $scope.$watch('$ctrl.parentCtrl.services', function(service) {
-            // Iterate through the services array
-            var i;
-            for (i = 0; i < service.length; i++) {
-                // Only act on services with an OpenLibrary URL
-                if (service[i]['serviceUrl'].startsWith('https://openlibrary.org/search?isbn=')) {
-                    let label = service[i]['packageName'] + '  , opens in a new window';
-                    let selector = 'md-list-item[aria-label="' + label + '"]';
-                    console.log(selector);
+            // Only act if service is defined
+            if (service) {
+                // Iterate through the services array
+                var i;
+                for (i = 0; i < service.length; i++) {
+                    // Only act on services with an OpenLibrary URL
+                    if (service[i]['serviceUrl'].startsWith('https://openlibrary.org/search?isbn=')) {
+                        let label = service[i]['packageName'] + '  , opens in a new window';
+                        let selector = 'md-list-item[aria-label="' + label + '"]';
 
-                    // Get ISBN from Open Library service link
-                    let isbn = isbnCheck.setIsbn(service[i]['link-to-service']);
+                        // Get ISBN from Open Library service link
+                        let isbn = isbnCheck.setIsbn(service[i]['serviceUrl']);
 
-                    // Check Open Library for borrowable copy of book and hide/show based on results
-                    isbnCheck.openLibrary(getIt, isbn, selector, ctrl);
+                        // Check Open Library for borrowable copy of book and hide/show based on results
+                        isbnCheck.openLibrary(getIt, isbn, selector, ctrl);
+                    }
                 }
             }
         })
