@@ -87,7 +87,7 @@
         return self;
     }]);
 
-    /* Hide OpenLibrary link as "Availability > REQUEST" if no ISBN match */
+    /* Hide OpenLibrary link as "Availability > REQUEST" (Get It) if no ISBN match */
     app.controller('HideOpenLibraryRequestController', ['isbnCheck', '$scope', function(isbnCheck, $scope) {
         let ctrl = this;
         let getIt = '';
@@ -124,7 +124,7 @@
         template: ''
     })
 
-    /* Hide OpenLibrary link as "How to Get It" (no sub-heading) if no ISBN match */
+    /* Hide OpenLibrary link as "How to Get It" w/no sub-heading (How to Get It) if no ISBN match */
     app.controller('HideOpenLibraryGetItController', ['isbnCheck', '$scope', function(isbnCheck, $scope) {
         let ctrl = this;
         let getIt = 'how';
@@ -158,7 +158,7 @@
         template: ''
     })
 
-    /* Hide OpenLibrary link as "View Online > Full text availability" if no ISBN match */
+    /* Hide OpenLibrary link as "View Online > Full text availability" (View It) if no ISBN match */
     app.controller('HideOpenLibraryOnlineController', ['isbnCheck', '$scope', function(isbnCheck, $scope) {
         let ctrl = this;
         let getIt = '';
